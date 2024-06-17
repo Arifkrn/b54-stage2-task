@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int     @id @default(autoincrement())
+  username     String  @unique
+  fullName     String
+  email        String  @unique
+  password     String
+  photoProfile String?
+  bio          String?
+
+  threads Thread[]
+  replies Reply[]
+  likes   Like[]
+
+  followeds Follow[] @relation(name: "followed")
+  followers Follow[] @relation(name: "follower")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  
+
+  @@map("users")
+}
+
+model Thread {
+  id      Int     @id @default(autoincrement())
+  content String
+  image   String?
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?
+
+  replies Reply[]
+  likes   Like[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("threads")
+}
+
+model Reply {
+  id      Int     @id @default(autoincrement())
+  image   String?
+  content String
+
+  User     User?   @relation(fields: [userId], references: [id])
+  userId   Int?
+  Thread   Thread? @relation(fields: [threadId], references: [id])
+  threadId Int?
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @default(now()) @updatedAt
+
+  @@map("replies")
+}
+
+model Like {
+  id Int @id @default(autoincrement())
+
+  User     User?   @relation(fields: [userId], references: [id])
+  userId   Int?
+  Thread   Thread? @relation(fields: [threadId], references: [id])
+  threadId Int?
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @default(now()) @updatedAt
+
+  @@map("likes")
+}
+
+model Follow {
+  id Int @id @default(autoincrement())
+
+  followedId Int?
+  followed   User? @relation(name: "followed", fields: [followedId], references: [id])
+  followerId  Int?
+  follower    User? @relation(name: "follower", fields: [followerId], references: [id])
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @default(now()) @updatedAt
+
+
+  @@map("follows")
+}
