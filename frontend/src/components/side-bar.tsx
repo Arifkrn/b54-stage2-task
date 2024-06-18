@@ -15,10 +15,12 @@ export function Sidebar (){
         top="0"
         mt="0"
         w="350px"
-        
+        height={"100vh"}
         display="flex"
         flexDirection="column"
         justifyContent="space-between"
+        borderRightWidth={"1px"}
+        borderColor={"gray"}
         >
             <VStack ps="6" align="start" spacing="2">
                     <Text fontSize="5xl" color="green" fontWeight="bold" >Circle</Text>

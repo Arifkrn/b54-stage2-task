@@ -3,7 +3,7 @@ import { Box } from "@chakra-ui/react"
 // import { useEffect, useState } from "react"
 // import { api } from "../libs/api"
 // import { UserrrProfile } from "../exercises/contoh"
-import { RegisterForm } from "../features/auth/components/register"
+import { RegisterForm } from "../features/auth-register/components/register"
 
 function RegisterPage(){
     // type Post = {

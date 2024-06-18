@@ -1,59 +1,54 @@
 
 import { Myprofile } from "../components/my-profile";
 import { Sidebar } from "../components/side-bar";
-import { Flex } from "@chakra-ui/react"
+import { Button, Flex, Heading, Input } from "@chakra-ui/react"
 import { Suggest } from "../components/suggest";
 import { Contactme } from "../components/contact-me";
-import { Thread } from "../components/Thread";
-import { Header } from "../components/header";
+import { ThreadCard } from "../features/home/components/thread";
+import { api } from "../libs/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { CreateThreadDTO } from "../features/home/types/thread";
+import { createThreadSchema } from "../features/home/validators/thread";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { ThreadEntity } from "../features/home/entities/thread";
+import { AxiosError } from "axios";
 
+function HomePage() {
 
+    const { data: threads, refetch } = useQuery<ThreadEntity[]>({queryKey: ["threads"], queryFn: getThreads })
 
-const HomePage = () => {
-    const dataHeader = {
-        mypicture : "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=600"
+    const {register, handleSubmit} = useForm<CreateThreadDTO>({
+        mode: "onSubmit",
+        resolver: zodResolver(createThreadSchema),
+    });
+    
+    async function getThreads(){
+        const response = await api.get("/threads", {
+            headers:{
+                Authorization: `Bearer ${localStorage.token}`,
+            },
+        });
+        return response.data;
     }
 
-    const dataThread = [{
-        profile : "https://images.pexels.com/photos/4051667/pexels-photo-4051667.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-        name : "Arif Kurniawan",
-        username : "@arifk12",
-        time : "4h",
-        article : "ini adalah sebuah contoh adalah orang yang menjadi sebuah panutan bagi suatu bangsa dan juga negara",
-        likes : 42,
-        comments : "3 replies",
-        pictures : "https://images.pexels.com/photos/4051667/pexels-photo-4051667.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
-    },
-    {
-        profile : "https://images.pexels.com/photos/4051667/pexels-photo-4051667.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-        name : "Fardhan",
-        username : "@fard",
-        time : "4h",
-        article : "ini adalah sebuah contoh adalah orang yang menjadi sebuah panutan bagi suatu bangsa dan juga negara",
-        likes : 42,
-        comments : "3 replies",
-        
-    },
-    {
-        profile : "https://images.pexels.com/photos/18454473/pexels-photo-18454473/free-photo-of-kota-tengara-penunjuk-penanda.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-        name : "Ardiansyah",
-        username : "@aard",
-        time : "4h",
-        article : "ini adalah sebuah contoh adalah orang yang menjadi sebuah panutan bagi suatu bangsa dan juga negara",
-        likes : 42,
-        comments : "3 replies",
-        
-    },
-    {
-        profile : "https://images.pexels.com/photos/4051667/pexels-photo-4051667.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-        name : "sahrian",
-        username : "@ryan",
-        time : "4h",
-        article : "ini adalah sebuah contoh adalah orang yang menjadi sebuah panutan bagi suatu bangsa dan juga negara",
-        likes : 42,
-        comments : "3 replies",
-        
-    }]
+    const { mutateAsync } = useMutation<ThreadEntity, AxiosError, CreateThreadDTO>({
+        mutationFn: (newThread) => {
+            const formData = new FormData()
+            formData.append("content", newThread.content);
+            formData.append("image", newThread.image[0]);
+            return api.post("/threads", formData);
+        },
+    });
+
+    const onSubmit: SubmitHandler<CreateThreadDTO> = async (data)  =>{
+        try{
+            await mutateAsync(data);
+            refetch();
+        }catch(error){
+            console.log(error);
+        }
+    };
 
     const dataMyprofile = {
         sampul : "https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -74,13 +69,14 @@ const HomePage = () => {
             <Flex flexDir={"column"}>
 
                 {/* Header */}
-                <Header
-                mypicture = {dataHeader.mypicture}/>
-
+                <Heading>Home</Heading>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Input {...register("content")} placeholder="What is happening?!" borderRadius="full" color="none" size="sm"/>
+                    <Input type="file"  {...register("image")}/>
+                    <Button type="submit">post</Button>
+                </form>
                 {/* Thread */}
-                {dataThread.map((item, index) => (
-                    <Thread key={index} data={item} />
-                ))}
+                {threads?.map((thread) => <ThreadCard thread={thread} />)}
 
             </Flex>
             <Flex flexDir={"column"}>

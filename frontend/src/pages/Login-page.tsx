@@ -1,6 +1,6 @@
 // import { useContext, useEffect } from "react"
 // import { Login } from "../components/login"
-import {LoginForm} from "../features/auth/components/login"
+import {LoginForm} from "../features/auth-login/components/login"
 // import { TransactionContext } from "../context/transaction-context"
 import { Box } from "@chakra-ui/react";
 
