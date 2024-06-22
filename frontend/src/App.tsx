@@ -5,13 +5,15 @@ import RegisterPage from "./pages/register-page"
 import FollowsPage from "./pages/Follows-page"
 import SearchPage from "./pages/Search-page"
 import { useEffect, useState } from "react"
-import CobaPage from "./pages/coba"
 import { api } from "./libs/api"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "./redux/store"
 import { SET_USER } from "./redux/slices/auth"
 import PostPage from "./pages/posts"
 import { useToast } from '@chakra-ui/react'
+import MyProfilePage from "./pages/Myprofile-page"
+import ForgotPasswordPage from "./pages/forgotpassword-page"
+import ResetPasswordPage from "./pages/resetpassword-page"
 
 
 function App() {
@@ -77,12 +79,14 @@ function App() {
         <Route path="/auth/login" element={<LoginPage/>} />
         <Route path="/auth/register" element={<RegisterPage/>}/>
         <Route path="/posts" element={<PostPage/>}/>
+        <Route path="/auth/forgot-password" element={<ForgotPasswordPage/>}/>
+        <Route path="/auth/reset-password" element={<ResetPasswordPage/>}/>
 
         <Route element={<PrivateRoute/>}>
           <Route path="/home" element={<HomePage/>} />
           <Route path="/search" element={<SearchPage/>} />
           <Route path="/follows" element={<FollowsPage/>} />
-          <Route path="/coba" element={<CobaPage/>} />
+          <Route path="/myprofile" element={<MyProfilePage/>} />
         </Route>
       </Routes>
   )

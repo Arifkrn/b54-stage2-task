@@ -1,100 +1,66 @@
 
 import { Myprofile } from "../components/my-profile";
 import { Sidebar } from "../components/side-bar";
-import { Button, Flex, Heading, Input } from "@chakra-ui/react"
+import { Button, Flex, Heading, Input, InputGroup, InputLeftAddon, InputRightAddon } from "@chakra-ui/react"
 import { Suggest } from "../components/suggest";
 import { Contactme } from "../components/contact-me";
 import { ThreadCard } from "../features/home/components/thread";
-import { api } from "../libs/api";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { CreateThreadDTO } from "../features/home/types/thread";
-import { createThreadSchema } from "../features/home/validators/thread";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { ThreadEntity } from "../features/home/entities/thread";
-import { AxiosError } from "axios";
+import { useHomePage } from "../hooks/use-home-page";
+import { FaSearch } from "react-icons/fa";
 
 function HomePage() {
 
-    const { data: threads, refetch } = useQuery<ThreadEntity[]>({queryKey: ["threads"], queryFn: getThreads })
+    const {
+        threads,
+        register,
+        handleSubmit,
+        onSubmit
+    } = useHomePage()    
 
-    const {register, handleSubmit} = useForm<CreateThreadDTO>({
-        mode: "onSubmit",
-        resolver: zodResolver(createThreadSchema),
-    });
-    
-    async function getThreads(){
-        const response = await api.get("/threads", {
-            headers:{
-                Authorization: `Bearer ${localStorage.token}`,
-            },
-        });
-        return response.data;
-    }
-
-    const { mutateAsync } = useMutation<ThreadEntity, AxiosError, CreateThreadDTO>({
-        mutationFn: (newThread) => {
-            const formData = new FormData()
-            formData.append("content", newThread.content);
-            formData.append("image", newThread.image[0]);
-            return api.post("/threads", formData);
-        },
-    });
-
-    const onSubmit: SubmitHandler<CreateThreadDTO> = async (data)  =>{
-        try{
-            await mutateAsync(data);
-            refetch();
-        }catch(error){
-            console.log(error);
-        }
-    };
-
-    const dataMyprofile = {
-        sampul : "https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&w=600",
-        picprof : "https://images.pexels.com/photos/15578747/pexels-photo-15578747/free-photo-of-alam-hewan-binatang-fauna.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-    }
-    const dataSuggest = {
-        title : "Suggested for you",
-        picture : "https://images.pexels.com/photos/810775/pexels-photo-810775.jpeg?auto=compress&cs=tinysrgb&w=600",
-        name : "Karl Marx",
-        username : "@karlmarxs",
-    }
+    // const dataMyprofile = {
+    //     sampul : "https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&w=600",
+    //     picprof : "https://images.pexels.com/photos/15578747/pexels-photo-15578747/free-photo-of-alam-hewan-binatang-fauna.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+    // }
+    // const dataSuggest = {
+    //     title : "Suggested for you",
+    //     name : "Karl Marx",
+    //     username : "@karlmarxs",
+    // }
 
 
     return (
         <Flex flexDir={"row"} width={"100%"}>
             {/* sidebar */}
             <Sidebar/>
-            <Flex flexDir={"column"}>
+            <Flex flexDir={"column"} padding={2} w={"700px"}>
 
                 {/* Header */}
-                <Heading>Home</Heading>
+                <Heading size={"lg"}>Home</Heading>
+                
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <Input {...register("content")} placeholder="What is happening?!" borderRadius="full" color="none" size="sm"/>
-                    <Input type="file"  {...register("image")}/>
-                    <Button type="submit">post</Button>
+                <Flex gap={1} borderBottom={"1px"} pb={8} pt={2}>
+                    <InputGroup size={"sm"}>
+                    <InputLeftAddon  bg={"green"}><FaSearch /></InputLeftAddon>
+                        <Input {...register("content")} placeholder="What is happening?!" w={"500px"} borderRadius="full" color="none" size="sm"/>
+                    <InputRightAddon><Input type="file"  {...register("image")} width={20} size={"sm"}/></InputRightAddon>
+                    </InputGroup>
+                    
+                    <Button marginEnd={0} type="submit" size={"sm"} bg={"green"} color={"white"}>post</Button>
+                </Flex>
                 </form>
                 {/* Thread */}
                 {threads?.map((thread) => <ThreadCard thread={thread} />)}
+                
 
             </Flex>
-            <Flex flexDir={"column"}>
-                    {/* Myprofile */}
-                    <Myprofile
-                    sampul = {dataMyprofile.sampul}
-                    picprof = {dataMyprofile.picprof}/>
-
-                    <Suggest
-                    title = {dataSuggest.title}
-                    picture= {dataSuggest.picture}
-                    name = {dataSuggest.name}
-                    username = {dataSuggest.username}/>
+            <Flex flexDir={"column"} borderWidth={"0px 0px 1px 1px"} w={"480px"} h={"100vh"} borderColor={"gray"}>
+                    <Myprofile/>
+                    <Suggest/>
                     <Contactme/>
             </Flex>
                     
                
-            </Flex>
+        </Flex>
         
     )
 }

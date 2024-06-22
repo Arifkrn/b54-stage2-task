@@ -3,12 +3,13 @@ import UserService from "../services/user";
 
 async function find(req: Request, res: Response){
     try {
+        const search = req.query.search as string;
         const user = res.locals.user;
-        const users = await UserService.find(user);
+        const users = await UserService.find(search);
         return res.json(users);
     } catch (error){
         res.status(500).json({
-            message: error, 
+            message: error.message, 
         });
     }
 }

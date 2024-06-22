@@ -1,17 +1,8 @@
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Flex, Image, VStack, Button } from "@chakra-ui/react"
-import { useState } from "react"
+import { Box, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Flex, VStack, Button, Avatar } from "@chakra-ui/react"
+import { useState } from "react" 
 
 
-interface FollowsProps{
-    profile : string,
-    name : string,
-    username : string,
-    article : string
-}
- 
-
-
-export const Follows = ({profile, name, username, article}: FollowsProps) => {
+export function Follows() {
     
     const [isChange, setIsChange] = useState<boolean>(false)
     return(
@@ -34,11 +25,11 @@ export const Follows = ({profile, name, username, article}: FollowsProps) => {
                     <TabPanel>
                         <Flex gap="3" mb="6" display="flex" alignItems="center" width="100%" justifyContent="space-between">
                             <Flex>
-                                <Image boxSize="40px" borderRadius="30" marginRight="3" src={profile} alt="" />
+                                <Avatar boxSize="40px" borderRadius="30" marginRight="3" src="https://images.pexels.com/photos/20511332/pexels-photo-20511332/free-photo-of-burung-air-cairan-danau.jpeg?auto=compress&cs=tinysrgb&w=600" />
                                 <VStack gap="0" fontSize="10px" align="start">
-                                    <Text fontWeight="bold">{name}</Text>
-                                    <Text color="gray">{username}</Text>
-                                    <Text>{article}</Text>
+                                    <Text fontWeight="bold">Dio aldino</Text>
+                                    <Text color="gray">@dioo</Text>
+                                    <Text>my name</Text>
                                 </VStack>
                             </Flex>
 
@@ -75,11 +66,11 @@ export const Follows = ({profile, name, username, article}: FollowsProps) => {
                         </Flex>
                         <Flex gap="0" mb="6" display="flex" alignItems="center" width="100%" justifyContent="space-between">
                             <Flex>
-                                <Image boxSize="40px" borderRadius="30" marginRight="3" src={profile} alt="" />
+                                <Avatar boxSize="40px" borderRadius="30" marginRight="3" src="" />
                                 <VStack gap="0" fontSize="10px" align="start">
-                                    <Text fontWeight="bold">{name}</Text>
-                                    <Text color="gray">{username}</Text>
-                                    <Text>{article}</Text>
+                                    <Text fontWeight="bold">jinan</Text>
+                                    <Text color="gray">@jinan</Text>
+                                    <Text>ini jinan</Text>
                                 </VStack>
                             </Flex>
                             <Button 
@@ -96,11 +87,11 @@ export const Follows = ({profile, name, username, article}: FollowsProps) => {
                         </Flex>
                         <Flex gap="0" mb="6" display="flex" alignItems="center" width="100%" justifyContent="space-between">
                             <Flex>
-                                <Image boxSize="40px" borderRadius="30" marginRight="3" src={profile} alt="" />
+                                <Avatar boxSize="40px" borderRadius="30" marginRight="3" src="" />
                                 <VStack gap="0" fontSize="10px" align="start">
-                                    <Text fontWeight="bold">{name}</Text>
-                                    <Text color="gray">{username}</Text>
-                                    <Text>{article}</Text>
+                                    <Text fontWeight="bold">rona</Text>
+                                    <Text color="gray">@rona</Text>
+                                    <Text>ronaldo</Text>
                                 </VStack>
                             </Flex>
                             <Button marginStart="12" 
@@ -119,11 +110,11 @@ export const Follows = ({profile, name, username, article}: FollowsProps) => {
                     <TabPanel>
                     <Flex gap="3" mb="6" display="flex" alignItems="center" width="100%" justifyContent="space-between">
                             <Flex>
-                                <Image boxSize="40px" borderRadius="30" marginRight="3" src="https://images.pexels.com/photos/4067761/pexels-photo-4067761.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" />
+                                <Avatar boxSize="40px" borderRadius="30" marginRight="3" src="https://images.pexels.com/photos/4067761/pexels-photo-4067761.jpeg?auto=compress&cs=tinysrgb&w=600"  />
                                 <VStack gap="0" fontSize="10px" align="start">
-                                    <Text fontWeight="bold">{name}</Text>
-                                    <Text color="gray">{username}</Text>
-                                    <Text>{article}</Text>
+                                    <Text fontWeight="bold">dian</Text>
+                                    <Text color="gray">@dian</Text>
+                                    <Text>ini dian</Text>
                                 </VStack>
                             </Flex>
 
@@ -160,11 +151,11 @@ export const Follows = ({profile, name, username, article}: FollowsProps) => {
                         </Flex>
                         <Flex gap="0" mb="6" display="flex" alignItems="center" width="100%" justifyContent="space-between">
                             <Flex>
-                                <Image boxSize="40px" borderRadius="30" marginRight="3" src={profile} alt="" />
+                                <Avatar boxSize="40px" borderRadius="30" marginRight="3" src="" />
                                 <VStack gap="0" fontSize="10px" align="start">
-                                    <Text fontWeight="bold">{name}</Text>
-                                    <Text color="gray">{username}</Text>
-                                    <Text>{article}</Text>
+                                    <Text fontWeight="bold">alvin</Text>
+                                    <Text color="gray">@alvino</Text>
+                                    <Text>alvinn</Text>
                                 </VStack>
                             </Flex>
                             <Button marginStart="12" 

@@ -1,9 +1,10 @@
-import { Box, Heading, Flex, Text, Input, Button, BoxProps } from "@chakra-ui/react"
+import { Box, Heading, Flex, Text, Input, Button, BoxProps, InputGroup, InputRightElement, Link } from "@chakra-ui/react"
 import { api } from "../../../libs/api";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from '@chakra-ui/react'
-
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 interface RegisterFormProps extends BoxProps{}
 
@@ -12,6 +13,9 @@ type RegisterForm = {
     password: string;
 }
 export function RegisterForm(props: RegisterFormProps){
+
+    const [show, setShow] = React.useState(false)
+    const handleClick = () => setShow(!show)
 
     const [form, setForm] = useState<RegisterForm>({
         email: "",
@@ -85,13 +89,20 @@ export function RegisterForm(props: RegisterFormProps){
                             size={"md"}
                             onChange={handleChange}
                         />
-                        <Input
-                            name="password" 
-                            placeholder={"password"} 
-                            size={"md"}
-                            type={"password"} 
-                            onChange={handleChange}
-                        />
+                        <InputGroup>
+                            <Input
+                                name="password" 
+                                placeholder={"password"} 
+                                size={"md"}
+                                type={ show ? "text" : "password"} 
+                                onChange={handleChange}
+                            />
+                            <InputRightElement width="50px">
+                                    <Button bg={"gray"} h="20px" size="sm" onClick={handleClick}>
+                                    {show ? <FaEyeSlash /> : <FaEye />}
+                                    </Button>
+                            </InputRightElement>
+                        </InputGroup>
                         {/* {imagePreview && <Image src={imagePreview} height="200px" />}
                         <Input
                             name="image" 
@@ -107,6 +118,9 @@ export function RegisterForm(props: RegisterFormProps){
                             onClick={handleSubmit}>
                             Create
                         </Button>
+                        <Text>Already have account?
+                            <Link href="/auth/login" color="green"> Login</Link>
+                        </Text>
                     </Flex>  
                 </Box>
             </Flex>

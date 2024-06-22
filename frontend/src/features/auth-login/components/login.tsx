@@ -1,12 +1,15 @@
-import { Box, Heading, Flex, Text, Input, Button, Link, BoxProps } from "@chakra-ui/react"
+import { Box, Heading, Flex, Text, Input, Button, Link, BoxProps, InputGroup, InputRightElement } from "@chakra-ui/react"
 import { useLoginForm } from "../hooks/use-login-from"
-
+import React from "react"
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 interface LoginFormProps extends BoxProps{}
 
 export function LoginForm(props: LoginFormProps){
     const { handleSubmit, onSubmit, register, errors } = useLoginForm()
-
+    const [show, setShow] = React.useState(false)
+    const handleClick = () => setShow(!show)
 
     return(
         
@@ -30,12 +33,19 @@ export function LoginForm(props: LoginFormProps){
                             {...register("email")}
                         />
                         <Text color="red">{errors.email?.message}</Text>
-                        <Input
-                            placeholder="password"
-                            size="md"
-                            type="password"
-                            {...register("password")}
-                        />
+                        <InputGroup>
+                            <Input
+                                placeholder="password"
+                                size="md"
+                                type={show ? 'text' : 'password'}
+                                {...register("password")}
+                            />
+                            <InputRightElement width="50px">
+                                <Button bg={"gray"} h="20px" size="sm" onClick={handleClick}>
+                                {show ? <FaEyeSlash /> : <FaEye />}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
                         <Text color="red">{errors.password?.message}</Text>
                         
                         {/* {imagePreview && <Image src={imagePreview} height="200px" />}

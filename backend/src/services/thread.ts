@@ -7,7 +7,18 @@ const prisma = new PrismaClient();
 
     async function find(){
         try {
-            return await prisma.thread.findMany();
+            return await prisma.thread.findMany({
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            username: true,
+                            fullName: true,
+                            photoProfile: true,
+                        },
+                    },
+                },
+            });
         } catch (error){
             return error;
         }
@@ -27,7 +38,7 @@ const prisma = new PrismaClient();
         }
     }
 
-    async function create(dto: CreateThreadDTO ){
+    async function create(dto: CreateThreadDTO, userId: number ){
         
         try{
             // validasi menggunakan JOI
@@ -47,7 +58,7 @@ const prisma = new PrismaClient();
             const upload = await cloudinary.uploader.upload(dto.image, {upload_preset: "b54circle"});
 
             return await prisma.thread.create({
-                data : { ...dto, image: upload.secure_url },
+                data : { ...dto, userId, image: upload.secure_url },
             });
         } catch(error){
             throw new String(error);

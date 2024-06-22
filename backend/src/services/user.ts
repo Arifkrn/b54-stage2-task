@@ -3,31 +3,41 @@ import { UserJWTPayload } from "../types/auth";
 
 const prisma = new PrismaClient();
 
-async function find(user : UserJWTPayload){
+async function find(search: string){
         
     try{
-        const users = await prisma.user.findMany();
-
-        const follows = await prisma.follow.findMany({
+        return await prisma.user.findMany({
             where: {
-                follower : {
-                    id: user.id,
-                },
+                username: {
+                    contains: search,
+                    mode: "insensitive",
+                }
+                
             },
         });
-
-        return users.map((user) => {
-            return follows.map((follow) => {
-                if(user.id === follow.followedId)
-                    return {...user, isFollowed: true};
-
-                return {...user, isFollowed: false};
-            })[0]
-        });
-
     } catch(error){
-        throw new String(error);
+        throw new Error(error.message || "failed to retrieve users");
     }
 }
 
+// async function find(user : UserJWTPayload, search: string){
+        
+//     try{
+//         const users = await prisma.user.findMany();
+
+//         const follows = await prisma.follow.findMany({
+//             where: {
+//                 followerId : user.id,
+//             },
+//         });
+
+//         return users.map((u) => {
+//             const isFollowed = follows.some((follow) => follow.followedId === u.id);
+//             return { ...u, isFollowed };
+//         });
+
+//     } catch(error){
+//         throw new Error(error.message || "failed to retrieve users");
+//     }
+// }
 export default { find };
